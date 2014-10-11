@@ -18,6 +18,8 @@ class BillingAddressRequest extends AbstractType{
 
     private $zipCode;
 
+    private $country;
+
     private $phone;
 
     private $email;
@@ -150,6 +152,22 @@ class BillingAddressRequest extends AbstractType{
         return $this->zipCode;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
     public function setAdvancedChargeParameters($array = false)
     {
         $parameters = array(
@@ -158,6 +176,7 @@ class BillingAddressRequest extends AbstractType{
             'street3' => $this->getStreet3(),
             'city' => $this->getCity(),
             'state' => $this->getState(),
+            'country' => $this->getCountry(),
             'zip' => $this->getZipCode(),
             'phone' => $this->getPhone(),
             'email' => $this->getEmail(),
@@ -172,5 +191,4 @@ class BillingAddressRequest extends AbstractType{
 
         return $this;
     }
-
 }

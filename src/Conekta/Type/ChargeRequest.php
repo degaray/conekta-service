@@ -3,192 +3,210 @@
 namespace Conekta\Type;
 
 use Conekta\Type\AbstractType;
+use Conekta\Type\DetailsRequest;
 
-class BillingAddressRequest extends AbstractType{
+class ChargeRequest extends AbstractType{
 
-    private $street1;
+    private $id;
 
-    private $street2;
+    private $key;
 
-    private $street3;
+    private $token;
 
-    private $city;
+    private $amount;
 
-    private $state;
+    private $currency;
 
-    private $zipCode;
+    private $description;
 
-    private $country;
+    private $reference;
 
-    private $phone;
+    private $details;
 
-    private $email;
+    public function __construct()
+    {
+        $this->details = new DetailsRequest();
+        $this->setUrl('charges');
+    }
 
     /**
-     * @param mixed $city
+     * @param mixed $id
      */
-    public function setCity($city)
+    public function setId($id)
     {
-        $this->city = $city;
+        $this->id = $id;
     }
 
     /**
      * @return mixed
      */
-    public function getCity()
+    public function getId()
     {
-        return $this->city;
+        return $this->id;
     }
 
     /**
-     * @param mixed $email
+     * @param mixed $amount
      */
-    public function setEmail($email)
+    public function setAmount($amount)
     {
-        $this->email = $email;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $phone
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
+        $this->amount = $amount;
     }
 
     /**
      * @return mixed
      */
-    public function getPhone()
+    public function getAmount()
     {
-        return $this->phone;
+        return $this->amount;
     }
 
     /**
-     * @param mixed $state
+     * @param mixed $currency
      */
-    public function setState($state)
+    public function setCurrency($currency)
     {
-        $this->state = $state;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param mixed $street1
-     */
-    public function setStreet1($street1)
-    {
-        $this->street1 = $street1;
+        $this->currency = $currency;
     }
 
     /**
      * @return mixed
      */
-    public function getStreet1()
+    public function getCurrency()
     {
-        return $this->street1;
+        return $this->currency;
     }
 
     /**
-     * @param mixed $street2
+     * @param mixed $description
      */
-    public function setStreet2($street2)
+    public function setDescription($description)
     {
-        $this->street2 = $street2;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStreet2()
-    {
-        return $this->street2;
-    }
-
-    /**
-     * @param mixed $street3
-     */
-    public function setStreet3($street3)
-    {
-        $this->street3 = $street3;
+        $this->description = $description;
     }
 
     /**
      * @return mixed
      */
-    public function getStreet3()
+    public function getDescription()
     {
-        return $this->street3;
+        return $this->description;
     }
 
     /**
-     * @param mixed $zipCode
+     * @param mixed $key
      */
-    public function setZipCode($zipCode)
+    public function setKey($key)
     {
-        $this->zipCode = $zipCode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getZipCode()
-    {
-        return $this->zipCode;
+        $this->key = $key;
     }
 
     /**
      * @return mixed
      */
-    public function getCountry()
+    public function getKey()
     {
-        return $this->country;
+        return $this->key;
     }
 
     /**
-     * @param mixed $country
+     * @param mixed $token
      */
-    public function setCountry($country)
+    public function setToken($token)
     {
-        $this->country = $country;
+        $this->token = $token;
     }
 
-    public function setAdvancedChargeParameters($array = false)
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param mixed $reference
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param \Conekta\Type\DetailsRequest $details
+     */
+    public function setDetails($details)
+    {
+        $this->details = $details;
+    }
+
+    /**
+     * @return \Conekta\Type\DetailsRequest
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    public function setChargeParameters()
     {
         $parameters = array(
-            'street1' => $this->getStreet1(),
-            'street2' => $this->getStreet2(),
-            'street3' => $this->getStreet3(),
-            'city' => $this->getCity(),
-            'state' => $this->getState(),
-            'country' => $this->getCountry(),
-            'zip' => $this->getZipCode(),
-            'phone' => $this->getPhone(),
-            'email' => $this->getEmail(),
+            'description' => $this->getDescription(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'reference_id' => $this->getReference(),
+            'card' => $this->getToken()
         );
-
-        if ($array) {
-
-            return $parameters;
-        }
 
         $this->setParameters($parameters);
 
         return $this;
     }
+
+    public function setAdvancedChargeParameters()
+    {
+        $parameters = array(
+            'description' => $this->getDescription(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'reference_id' => $this->getReference(),
+            'card' => $this->getToken(),
+            'details' => $this->getDetails()->setAdvancedChargeParameters(true)
+        );
+
+        $this->setParameters($parameters);
+
+        return $this;
+    }
+
+    public function setCaptureParameters()
+    {
+        $this->setUrl('charges/' . $this->getId() . '/capture');
+
+        return $this;
+    }
+
+    public function setRetrieveParameters()
+    {
+        $this->setUrl('charges/' . $this->getId());
+
+        return $this;
+    }
+
+    public function setRefundParameters()
+    {
+        $this->setUrl('charges/' . $this->getId() . '/refund');
+
+        return $this;
+    }
+
 }
